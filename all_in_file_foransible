@@ -1,0 +1,109 @@
+---
+# 1. apt (Ubuntu/Debian par package manage karne ke liye)
+- name: Apt Playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: Nginx install karein (Apt)
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+---
+# 2. yum (RHEL/CentOS par package manage karne ke liye)
+- name: Yum Playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: HTTPd install karein (Yum)
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+
+---
+# 3. package (Agnostic - System ke hisab se Apt ya Yum auto-select kar leta hai)
+- name: Generic Package Playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: Git install karein
+      ansible.builtin.package:
+        name: git
+        state: present
+
+---
+# 4. service (Service start, stop, ya enable karne ke liye)
+- name: Service Playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: Nginx service start karein aur boot par enable karein
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+
+---
+# 5. copy (Local machine se remote server par file copy karne ke liye)
+- name: Copy Playbook
+  hosts: all
+  tasks:
+    - name: Simple text file remote server par copy karein
+      ansible.builtin.copy:
+        src: ./my_local_file.txt
+        dest: /tmp/my_remote_file.txt
+        mode: '0644'
+
+---
+# 6. file (Directory banane, delete karne ya permissions change karne ke liye)
+- name: File Playbook
+  hosts: all
+  tasks:
+    - name: Ek nayi directory banayein
+      ansible.builtin.file:
+        path: /tmp/my_new_dir
+        state: directory
+        mode: '0755'
+
+---
+# 7. template (Jinja2 variables ke sath config file deploy karne ke liye)
+- name: Template Playbook
+  hosts: all
+  tasks:
+    - name: Dynamic dynamic config file deploy karein
+      ansible.builtin.template:
+        src: ./app.conf.j2
+        dest: /etc/app.conf
+        mode: '0644'
+
+---
+# 8. shell (Complex commands ya environment variables/pipes ke sath execute karne ke liye)
+- name: Shell Playbook
+  hosts: all
+  tasks:
+    - name: System par free memory check karein
+      ansible.builtin.shell: free -m | grep Mem | awk '{print $4}'
+      register: free_mem
+
+---
+# 9. command (Simple direct binary execute karne ke liye - pipe ya redirection support nahi karta)
+- name: Command Playbook
+  hosts: all
+  tasks:
+    - name: Uptime check karein
+      ansible.builtin.command: uptime
+
+---
+# 10. user (Linux user create, delete ya manage karne ke liye)
+- name: User Playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: Naya system user banayein
+      ansible.builtin.user:
+        name: john_doe
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+        state: present
