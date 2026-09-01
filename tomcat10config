@@ -1,0 +1,26 @@
+---
+- name: configure tomcat using loops
+  hosts: servers
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: install tomcat10 adn tomcat10-admin
+      ansible.builtin.apt:
+        name: "{{ item.a }}"
+        state: "{{ item.b }}"
+        update_cache: "{{ item.c }}"
+      loop:
+        - { a: tomcat10,b: absent,c: yes }
+        - { a: tomcat10-admin,b: absent, c: no }
+      notify: restart tomcat service
+
+    - name: wait for 05 seconds
+      ansible.builtin.pause:
+        seconds: 05
+
+  handlers:
+    - name: restart tomcat service
+      ansible.builtin.service:
+        name: tomcat10
+        state: stopped
+...
