@@ -1,0 +1,64 @@
+---
+# 1. Modules (Kisi kaam ko karne ke liye ready-made tool, jaise ping ya apt)
+- name: Module Example Playbook
+  hosts: all
+  tasks:
+    - name: Host ko ping karke connection check karein
+      ansible.builtin.ping:
+
+---
+# 2. Variables (Data ko dynamic rakhne ke liye values define karna)
+- name: Variables Example Playbook
+  hosts: all
+  vars:
+    app_port: 8080
+    user_name: dev_user
+  tasks:
+    - name: Variable ka use karke message print karein
+      ansible.builtin.debug:
+        msg: "App port {{ app_port }} par chalega user {{ user_name }} ke sath."
+
+---
+# 3. Conditions (when) (Specific shart poori hone par hi task chalana)
+- name: Condition Example Playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: Sirf RedHat/CentOS par HTTPd package install karein
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+      when: ansible_os_family == "RedHat"
+
+---
+# 4. Loops (loop) (Ek sath multiple items par ek hi task repeat karna)
+- name: Loop Example Playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: Multiple packages ek sath install karein
+      ansible.builtin.package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - curl
+        - git
+        - htop
+
+---
+# 5. Handlers (Jab task me koi 'change' ho tabhi trigger hone wale tasks)
+- name: Handler Example Playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: Config file update karein aur handler trigger karein
+      ansible.builtin.copy:
+        src: ./nginx.conf
+        dest: /etc/nginx/nginx.conf
+      notify: Restart Nginx Service
+
+  handlers:
+    - name: Restart Nginx Service
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
