@@ -1,0 +1,20 @@
+#vim childplaybook.yml
+
+---
+- name: copy the password file
+  copy:
+    src: /etc/password
+    dest: /tmp
+...
+
+#vim includetaks.yml
+---
+- name: call child playbook
+  hosts: all
+  tasks:
+    - name: run the child playbook
+      include_tasks: childplaybook.yml
+...
+
+#to execute playbook
+aonsible_playbook includetaks.yml
