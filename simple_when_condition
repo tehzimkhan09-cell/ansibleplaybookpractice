@@ -1,0 +1,14 @@
+---
+- name: when conditon impletmtin
+  hosts: servers
+  become: yes
+  gather_facts: false
+  vars:
+    a: 10
+  tasks:
+    - name: crete a file
+      ansible.builtin.file:
+        name: /tmp/file1
+        state: touch
+      when: a==10
+...
