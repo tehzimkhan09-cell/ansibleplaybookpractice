@@ -1,0 +1,20 @@
+to create ansible vault:
+ansible-vault create playbookname.yml
+
+to decrypt ansible vault playbook:
+ansible-vault decrypt playbookname.yml
+
+to encrypt ansible vault playbook:
+ansible-vault encrypt playbookname.yml
+
+to  edit ansible vault playbook:
+ansible-vault edit playbookname.yml
+
+to view ansible vault playbook:
+ansible-vault view playbookname.yml
+
+to change the password:
+ansible-vault rekey playbookname.yml
+
+to execute the vaultplaybook:
+sudo ansible-playbook playbookname.yml --ask-vault-pass
