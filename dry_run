@@ -3,6 +3,7 @@ $ vim java.yml
 - name: download java
   hosts: servers
   become: yes
+  gather_facts: false
   tasks:
     - name: java creation
       ansible.builtin.apt:
