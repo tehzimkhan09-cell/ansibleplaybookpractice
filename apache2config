@@ -1,0 +1,33 @@
+---
+- name: implnting apache2 config
+  hosts: servers
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: install apache2
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+        update_cache: yes
+      notify: check url response
+
+    - name: url respone check
+      ansible.builtin.copy:
+        content: "welcome tehzim"
+        dest: /var/www/html/index.html
+      notify: restart apache2
+
+  handlers:
+    - name: restart apache2
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
+
+    - name: check url response
+      ansible.builtin.uri:
+        url: "{{ item }}"
+        status_code: 200
+      loop:
+        - http://172.31.30.55
+        - http://172.31.17.104
+...
