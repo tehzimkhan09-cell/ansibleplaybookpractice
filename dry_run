@@ -1,0 +1,15 @@
+$ vim java.yml
+---
+- name: download java
+  hosts: servers
+  become: yes
+  tasks:
+    - name: java creation
+      ansible.builtin.apt:
+        name: openjdk-21-jdk
+        state: absent
+        update_cache: no
+...
+
+# dry run:
+$ansible-playbook java.yml --check          #ye execute nhi karta playbook ko balke sirf check karta hai
