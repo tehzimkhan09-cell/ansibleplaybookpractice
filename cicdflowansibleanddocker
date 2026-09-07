@@ -1,0 +1,26 @@
+---
+- name: create jenkins and tomcat container from ci-cd using docker and ansible
+  hosts: all
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: create jenkins
+      ansible.builtin.docker_container:
+        name: myjenkins
+        image: jenkins/jenkins
+        ports:
+          - 5050:8080
+
+    - name: create tomcat for qaserver and prodserver
+      ansible.builtin.docker_container:
+        name: "{{item.a}}"
+        image: tomcat
+        ports:
+          - "{{item.b}}"
+        links:
+          - myjenkins:jenkins
+
+      loop:
+          - {a: qaserver,b: "1111:8080"}
+          - {a: prodserver,b: "2222:8080"}
+...
