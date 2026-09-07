@@ -1,0 +1,12 @@
+---
+- name: docker install on all server
+  hosts: all
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: installation of docker
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+...
